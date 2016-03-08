@@ -64,7 +64,10 @@ function explore() {
         .selectFile(PSE)
         .then(function (response) {
             console.info('selectFile: data-received', response.toString('hex'));
-            //application.selectFile(aids[0].aid)
+            return application.selectFile(aids[8].aid)
+        })
+        .then(function (response) {
+            console.info('selectFile: data-received', response.toString('hex'));
         }).catch(function (error) {
             console.error('selectFile: error', error);
         });
