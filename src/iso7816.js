@@ -39,14 +39,14 @@ function iso7816(cardReader) {
                 return responsex;
             });
     };
-    var _selectFile = function (file) {
-        console.info('iso7816.selectFile', {file: file});
+    var _selectFile = function (bytes) {
+        console.info('iso7816.selectFile', bytes);
         return _issueCommand(command({
             cla: 0x00,
             ins: ins.SELECT_FILE,
             p1: 0x04,
             p2: 0x00,
-            data: data
+            data: bytes
         }).toBuffer());
     };
     var _getResponse = function (length) {

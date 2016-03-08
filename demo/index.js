@@ -2,26 +2,24 @@ var cardreader = require('card-reader');
 var iso7816 = require('../lib/iso7816');
 
 cardreader.on('device-activated', function (reader) {
-    console.info('Device activated', reader);
+    //console.info('Device activated', reader);
 });
 cardreader.on('device-deactivated', function (reader) {
-    console.info('Device deactivated', reader);
+    //console.info('Device deactivated', reader);
 });
 cardreader.on('card-removed', function (reader) {
-    console.info('Card removed', reader);
+    //console.info('Card removed', reader);
 });
 cardreader.on('data-received', function (data) {
-    console.info('Data received', data.toString());
+    //console.info('Data received', data.toString());
 });
 cardreader.on('error', function (error) {
-    console.info('Error', error);
+    //console.info('Error', error);
 });
-
-
 
 
 cardreader.on('card-inserted', function (reader, status) {
-    console.info('Card inserted', reader, status, this);
+    //console.info('Card inserted', reader, status, this);
     explore();
 });
 
@@ -35,12 +33,38 @@ function stringToByteArray(str) {
 }
 
 
+var aids = [
+    {name: 'VISA', aid: [0xa0, 0x00, 0x00, 0x00, 0x03]},
+    {name: 'VISA Debit/Credit', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x10, 0x10]},
+    {name: 'VISA Credit', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x10, 0x10, 0x01]},
+    {name: 'VISA Debit', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x10, 0x10, 0x02]},
+    {name: 'VISA Electron', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x20, 0x10]},
+    {name: 'VISA Interlink', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x30, 0x10]},
+    {name: 'VISA Plus', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x80, 0x10]},
+    {name: 'VISA ATM', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x99, 0x99, 0x10]},
+    {name: 'MASTERCARD', aid: [0xa0, 0x00, 0x00, 0x00, 0x04, 0x10, 0x10]},
+    {name: 'Maestro', aid: [0xa0, 0x00, 0x00, 0x00, 0x04, 0x30, 0x60]},
+    {name: 'Maestro UK', aid: [0xa0, 0x00, 0x00, 0x00, 0x05, 0x00, 0x01]},
+    {name: 'Maestro TEST', aid: [0xb0, 0x12, 0x34, 0x56, 0x78]},
+    {name: 'Self Service', aid: [0xa0, 0x00, 0x00, 0x00, 0x24, 0x01]},
+    {name: 'American Express', aid: [0xa0, 0x00, 0x00, 0x00, 0x25]},
+    {name: 'ExpressPay', aid: [0xa0, 0x00, 0x00, 0x00, 0x25, 0x01, 0x07, 0x01]},
+    {name: 'Link', aid: [0xa0, 0x00, 0x00, 0x00, 0x29, 0x10, 0x10]},
+    {name: 'Alias AID', aid: [0xa0, 0x00, 0x00, 0x00, 0x29, 0x10, 0x10]}
+];
+
+
 function explore() {
 
-    iso7816(cardreader)
-        .selectFile(stringToByteArray('1PAY.SYS.DDF01'))
+    //var PAY_SYS_DDF01 = stringToByteArray('1PAY.SYS.DDF01');
+    var PSE = [0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31];
+
+    var application = iso7816(cardreader);
+    application
+        .selectFile(PSE)
         .then(function (response) {
             console.info('selectFile: data-received', response.toString('hex'));
+            //application.selectFile(aids[0].aid)
         }).catch(function (error) {
             console.error('selectFile: error', error);
         });
