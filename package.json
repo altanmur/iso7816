@@ -14,6 +14,7 @@
     "smartcard",
     "smart-card",
     "iso7816",
+    "iso-7816",
     "chip-and-pin",
     "emv",
     "es6"
