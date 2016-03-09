@@ -61,7 +61,7 @@ function iso7816(cardReader) {
     };
     return {
         issueCommand: _issueCommand,
-        selectFile: _selectFile,
+        select: _selectFile,
         getResponse: _getResponse
     };
 }
