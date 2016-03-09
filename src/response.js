@@ -69,8 +69,8 @@ function response(buffer) {
         isOk: function () {
             return getStatusCode() === '9000';
         },
-        bytes: function () {
-            return data;
+        buffer: function () {
+            return buffer;
         },
         statusCode: getStatusCode,
         hasMoreBytesAvailable: function () {
