@@ -23,15 +23,6 @@ cardreader.on('card-inserted', function (reader, status) {
     explore();
 });
 
-function stringToByteArray(str) {
-    var arr = [];
-    for (var i = 0, l = str.length; i < l; i++) {
-        var hex = str.charCodeAt(i);
-        arr.push(hex);
-    }
-    return arr;
-}
-
 
 var aids = [
     {name: 'VISA', aid: [0xa0, 0x00, 0x00, 0x00, 0x03]},
@@ -56,7 +47,6 @@ var aids = [
 
 function explore() {
 
-    //var PAY_SYS_DDF01 = stringToByteArray('1PAY.SYS.DDF01');
     var PSE = [0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31];
 
     var application = iso7816(cardreader);
