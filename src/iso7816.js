@@ -1,4 +1,3 @@
-
 var command = require('./command');
 var response = require('./response');
 
@@ -61,7 +60,7 @@ function iso7816(cardReader) {
     };
     return {
         issueCommand: _issueCommand,
-        select: _selectFile,
+        selectFile: _selectFile,
         getResponse: _getResponse
     };
 }

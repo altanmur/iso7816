@@ -51,14 +51,14 @@ function explore() {
 
     var application = iso7816(cardreader);
     application
-        .select(PSE)
+        .selectFile(PSE)
         .then(function (response) {
             console.info('selectFile: data-received', response.toString('hex'));
             //return Promise.all(aids.map(function(aid) {
             //    console.info('', aid.name);
             //    return application.selectFile(aid.aid);
             //}));
-            return application.select(aids[8].aid)
+            return application.selectFile(aids[8].aid)
         })
         .then(function (response) {
             console.info('selectFile: data-received', response.toString('hex'));
