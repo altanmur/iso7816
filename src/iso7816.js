@@ -26,47 +26,54 @@ var ins = {
 
 function iso7816(cardReader) {
 
-    var _issueCommand = function (command) {
+    var _issueCommand = function (commandApdu) {
+        console.log(`_issueCommand '${commandApdu}' `);
         return cardReader
-            .issueCommand(command)
+            .issueCommand(commandApdu.toBuffer())
             .then(function (resp) {
                 var responsex = response(resp);
+                console.log(`status code '${responsex.statusCode()}'`);
                 if (responsex.hasMoreBytesAvailable()) {
-                    console.info('has ' + responsex.numberOfBytesAvailable() + ' more bytes available');
+                    console.log(`has '${responsex.numberOfBytesAvailable()}' more bytes available`);
                     return _getResponse(responsex.numberOfBytesAvailable());
+                } else if (responsex.isWrongLength()) {
+                    console.log(`'le' should be '${responsex.correctLength()}' bytes`);
+                    commandApdu.setLe(responsex.correctLength());
+                    return _issueCommand(commandApdu);
                 }
+                console.log(`return response '${responsex}' `);
                 return responsex;
             });
     };
     var _selectFile = function (bytes) {
-        console.info('iso7816.selectFile', bytes);
+        console.info(`iso7816.selectFile, file='${bytes}'`);
         return _issueCommand(command({
             cla: 0x00,
             ins: ins.SELECT_FILE,
             p1: 0x04,
             p2: 0x00,
             data: bytes
-        }).toBuffer());
+        }));
     };
     var _getResponse = function (length) {
-        console.info('iso7816.getResponse', length);
+        console.info(`iso7816.getResponse, length='${length}'`);
         return _issueCommand(command({
             cla: 0x00,
             ins: ins.GET_RESPONSE,
             p1: 0x00,
             p2: 0x00,
             le: length
-        }).toBuffer());
+        }));
     };
     var _readRecord = function (sfi, record) {
-        console.info('iso7816.readRecord', sfi, record);
+        console.info(`iso7816.readRecord, sfi='${sfi}', record=${record}`);
         return _issueCommand(command({
             cla: 0x00,
             ins: ins.READ_RECORD,
             p1: record,
             p2: (sfi << 3) + 4,
             le: 0
-        }).toBuffer());
+        }));
     };
     return {
         issueCommand: _issueCommand,

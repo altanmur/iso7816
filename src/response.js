@@ -80,6 +80,13 @@ function response(buffer) {
             var hexLength = data.substr(-2, 2);
             return parseInt(hexLength, 16);
         },
+        isWrongLength: function () {
+            return data.substr(-4, 2) === '6c';
+        },
+        correctLength: function () {
+            var hexLength = data.substr(-2, 2);
+            return parseInt(hexLength, 16);
+        },
         toString: function () {
             return 'Response [' + data + ']';
         }

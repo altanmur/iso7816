@@ -54,15 +54,37 @@ function explore() {
         .selectFile(PSE)
         .then(function (response) {
             console.info('selectFile: data-received', response.toString('hex'));
-            //return Promise.all(aids.map(function(aid) {
+            /*//return Promise.all(aids.map(function(aid) {
             //    console.info('', aid.name);
             //    return application.selectFile(aid.aid);
             //}));
-            return application.selectFile(aids[8].aid)
+            // return application.selectFile(aids[8].aid)
         })
         .then(function (response) {
             console.info('selectFile: data-received', response.toString('hex'));
         }).catch(function (error) {
             console.error('selectFile: error', error);
-        });
+        });*/
+            /*var promises = [];
+            for (var sfi = 1; sfi < 2; sfi++) {
+                for (var record = 1; record < 2; record++) {
+                    promises.push(application.readRecord(sfi, record));
+                }
+            }
+            return Promise.all(promises)*/
+            var sfi = 1;
+            var record = 1;
+            return application.readRecord(sfi, record);
+        })
+        .then(function (response) {
+            console.info('response', response.toString());
+            ////console.info('responses', responses);
+            //responses.forEach(function(response) {
+            //    console.info('response', response.response.toString());
+            //});
+            ////console.info('readRecord: data-received', response.buffer().toString('hex'));
+            //console.info('parsed:\n', response.toTlvString());
+        }).catch(function (error) {
+            console.error('Error:', error, error.stack);
+    });
 }

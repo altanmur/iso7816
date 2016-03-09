@@ -70,6 +70,11 @@ function command(obj) {
 
         toBuffer: function () {
             return new Buffer(bytes);
+        },
+
+        setLe: function(le) {
+            bytes.pop();
+            bytes.push(le);
         }
 
     }
