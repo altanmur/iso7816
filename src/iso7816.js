@@ -49,7 +49,7 @@ function iso7816(cardReader) {
         }).toBuffer());
     };
     var _getResponse = function (length) {
-        console.info('iso7816.getResponse', {length: length});
+        console.info('iso7816.getResponse', length);
         return _issueCommand(command({
             cla: 0x00,
             ins: ins.GET_RESPONSE,
@@ -58,10 +58,21 @@ function iso7816(cardReader) {
             le: length
         }).toBuffer());
     };
+    var _readRecord = function (sfi, record) {
+        console.info('iso7816.readRecord', sfi, record);
+        return _issueCommand(command({
+            cla: 0x00,
+            ins: ins.READ_RECORD,
+            p1: record,
+            p2: (sfi << 3) + 4,
+            le: 0
+        }).toBuffer());
+    };
     return {
         issueCommand: _issueCommand,
         selectFile: _selectFile,
-        getResponse: _getResponse
+        getResponse: _getResponse,
+        readRecord: _readRecord
     };
 }
 
