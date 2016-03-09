@@ -69,11 +69,14 @@ function response(buffer) {
         isOk: function () {
             return getStatusCode() === '9000';
         },
-        getStatusCode: getStatusCode,
+        bytes: function () {
+            return data;
+        },
+        statusCode: getStatusCode,
         hasMoreBytesAvailable: function () {
             return data.substr(-4, 2) === '61';
         },
-        getNumberOfBytesAvailable: function () {
+        numberOfBytesAvailable: function () {
             var hexLength = data.substr(-2, 2);
             return parseInt(hexLength, 16);
         },

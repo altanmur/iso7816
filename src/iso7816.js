@@ -33,8 +33,8 @@ function iso7816(cardReader) {
             .then(function (resp) {
                 var responsex = response(resp);
                 if (responsex.hasMoreBytesAvailable()) {
-                    console.info('has ' + responsex.getNumberOfBytesAvailable() + ' more bytes available');
-                    return _getResponse(responsex.getNumberOfBytesAvailable());
+                    console.info('has ' + responsex.numberOfBytesAvailable() + ' more bytes available');
+                    return _getResponse(responsex.numberOfBytesAvailable());
                 }
                 return responsex;
             });
