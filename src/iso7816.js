@@ -26,8 +26,8 @@ var ins = {
 
 function iso7816(cardReader) {
 
-    var _issueCommand = function (commandApdu) {
-        console.log(`_issueCommand '${commandApdu}' `);
+    var issueCommand = function (commandApdu) {
+        console.log(`iso7816.issueCommand '${commandApdu}' `);
         return cardReader
             .issueCommand(commandApdu.toBuffer())
             .then(function (resp) {
@@ -35,19 +35,19 @@ function iso7816(cardReader) {
                 console.log(`status code '${responsex.statusCode()}'`);
                 if (responsex.hasMoreBytesAvailable()) {
                     console.log(`has '${responsex.numberOfBytesAvailable()}' more bytes available`);
-                    return _getResponse(responsex.numberOfBytesAvailable());
+                    return getResponse(responsex.numberOfBytesAvailable());
                 } else if (responsex.isWrongLength()) {
                     console.log(`'le' should be '${responsex.correctLength()}' bytes`);
                     commandApdu.setLe(responsex.correctLength());
-                    return _issueCommand(commandApdu);
+                    return issueCommand(commandApdu);
                 }
                 console.log(`return response '${responsex}' `);
                 return responsex;
             });
     };
-    var _selectFile = function (bytes) {
+    var selectFile = function (bytes) {
         console.info(`iso7816.selectFile, file='${bytes}'`);
-        return _issueCommand(command({
+        return issueCommand(command({
             cla: 0x00,
             ins: ins.SELECT_FILE,
             p1: 0x04,
@@ -55,9 +55,9 @@ function iso7816(cardReader) {
             data: bytes
         }));
     };
-    var _getResponse = function (length) {
+    var getResponse = function (length) {
         console.info(`iso7816.getResponse, length='${length}'`);
-        return _issueCommand(command({
+        return issueCommand(command({
             cla: 0x00,
             ins: ins.GET_RESPONSE,
             p1: 0x00,
@@ -65,9 +65,9 @@ function iso7816(cardReader) {
             le: length
         }));
     };
-    var _readRecord = function (sfi, record) {
+    var readRecord = function (sfi, record) {
         console.info(`iso7816.readRecord, sfi='${sfi}', record=${record}`);
-        return _issueCommand(command({
+        return issueCommand(command({
             cla: 0x00,
             ins: ins.READ_RECORD,
             p1: record,
@@ -76,10 +76,10 @@ function iso7816(cardReader) {
         }));
     };
     return {
-        issueCommand: _issueCommand,
-        selectFile: _selectFile,
-        getResponse: _getResponse,
-        readRecord: _readRecord
+        issueCommand: issueCommand,
+        selectFile: selectFile,
+        getResponse: getResponse,
+        readRecord: readRecord
     };
 }
 
