@@ -3,7 +3,7 @@
 import hexify from 'hexify';
 
 
-function command(obj) {
+function createCommandApdu(obj) {
 
     var size = obj.size;
     var cla = obj.cla;
@@ -81,5 +81,5 @@ function command(obj) {
 }
 
 
-module.exports = command;
+module.exports = createCommandApdu;
 

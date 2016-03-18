@@ -1,5 +1,5 @@
-var command = require('./command');
-var response = require('./response');
+var createCommandApdu = require('./command');
+var createResponseApdu = require('./response');
 
 
 var ins = {
@@ -27,27 +27,27 @@ var ins = {
 function iso7816(cardReader) {
 
     var issueCommand = function (commandApdu) {
-        console.log(`iso7816.issueCommand '${commandApdu}' `);
+        //console.log(`iso7816.issueCommand '${commandApdu}' `);
         return cardReader
             .issueCommand(commandApdu.toBuffer())
             .then(function (resp) {
-                var responsex = response(resp);
-                console.log(`status code '${responsex.statusCode()}'`);
-                if (responsex.hasMoreBytesAvailable()) {
-                    console.log(`has '${responsex.numberOfBytesAvailable()}' more bytes available`);
-                    return getResponse(responsex.numberOfBytesAvailable());
-                } else if (responsex.isWrongLength()) {
-                    console.log(`'le' should be '${responsex.correctLength()}' bytes`);
-                    commandApdu.setLe(responsex.correctLength());
+                var response = createResponseApdu(resp);
+                //console.log(`status code '${response.statusCode()}'`);
+                if (response.hasMoreBytesAvailable()) {
+                    //console.log(`has '${response.numberOfBytesAvailable()}' more bytes available`);
+                    return getResponse(response.numberOfBytesAvailable());
+                } else if (response.isWrongLength()) {
+                    //console.log(`'le' should be '${response.correctLength()}' bytes`);
+                    commandApdu.setLe(response.correctLength());
                     return issueCommand(commandApdu);
                 }
-                console.log(`return response '${responsex}' `);
-                return responsex;
+                //console.log(`return response '${response}' `);
+                return response;
             });
     };
     var selectFile = function (bytes) {
-        console.info(`iso7816.selectFile, file='${bytes}'`);
-        return issueCommand(command({
+        //console.info(`iso7816.selectFile, file='${bytes}'`);
+        return issueCommand(createCommandApdu({
             cla: 0x00,
             ins: ins.SELECT_FILE,
             p1: 0x04,
@@ -56,8 +56,8 @@ function iso7816(cardReader) {
         }));
     };
     var getResponse = function (length) {
-        console.info(`iso7816.getResponse, length='${length}'`);
-        return issueCommand(command({
+        //console.info(`iso7816.getResponse, length='${length}'`);
+        return issueCommand(createCommandApdu({
             cla: 0x00,
             ins: ins.GET_RESPONSE,
             p1: 0x00,
@@ -66,8 +66,8 @@ function iso7816(cardReader) {
         }));
     };
     var readRecord = function (sfi, record) {
-        console.info(`iso7816.readRecord, sfi='${sfi}', record=${record}`);
-        return issueCommand(command({
+        //console.info(`iso7816.readRecord, sfi='${sfi}', record=${record}`);
+        return issueCommand(createCommandApdu({
             cla: 0x00,
             ins: ins.READ_RECORD,
             p1: record,

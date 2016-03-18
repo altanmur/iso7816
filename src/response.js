@@ -40,7 +40,7 @@ var statusCodes = {
 };
 
 
-function response(buffer) {
+function createResponseApdu(buffer) {
     var data = buffer.toString('hex');
 
     var getStatusCode = function () {
@@ -94,4 +94,4 @@ function response(buffer) {
 }
 
 
-module.exports = response;
+module.exports = createResponseApdu;
