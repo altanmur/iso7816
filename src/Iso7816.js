@@ -43,7 +43,7 @@ Iso7816.prototype.issueCommand = function(commandApdu) {
             } else if (response.isWrongLength()) {
                 //console.debug(`'le' should be '${response.correctLength()}' bytes`);
                 commandApdu.setLe(response.correctLength());
-                return issueCommand(commandApdu);
+                return this.issueCommand(commandApdu);
             }
             //console.debug(`return response '${response}' `);
             return response;
