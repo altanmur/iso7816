@@ -1,7 +1,5 @@
 'use strict';
 
-import hexify from 'hexify';
-
 var statusCodes = {
     '^9000$': 'Normal processing',
     '^61(.{2})$': 'Normal processing, (sw2 indicates the number of response bytes still available)',
@@ -40,58 +38,59 @@ var statusCodes = {
 };
 
 
-function createResponseApdu(buffer) {
-    var data = buffer.toString('hex');
-
-    var getStatusCode = function () {
-        return data.substr(-4);
-    };
-    return {
-
-        getStatus: function () {
-            var statusCode = getStatusCode();
-            var meaning = 'Unknown';
-            for (var prop in statusCodes) {
-                if (statusCodes.hasOwnProperty(prop)) {
-                    var result = statusCodes[prop];
-                    if (statusCode.match(prop)) {
-                        meaning = result;
-                        break;
-                    }
-
-                }
-            }
-            return {
-                code: statusCode,
-                meaning: meaning
-            };
-        },
-        isOk: function () {
-            return getStatusCode() === '9000';
-        },
-        buffer: function () {
-            return buffer;
-        },
-        statusCode: getStatusCode,
-        hasMoreBytesAvailable: function () {
-            return data.substr(-4, 2) === '61';
-        },
-        numberOfBytesAvailable: function () {
-            var hexLength = data.substr(-2, 2);
-            return parseInt(hexLength, 16);
-        },
-        isWrongLength: function () {
-            return data.substr(-4, 2) === '6c';
-        },
-        correctLength: function () {
-            var hexLength = data.substr(-2, 2);
-            return parseInt(hexLength, 16);
-        },
-        toString: function () {
-            return 'Response [' + data + ']';
-        }
-    }
+function ResponseApdu(buffer) {
+    this.buffer = buffer;
+    this.data = buffer.toString('hex');
 }
 
+ResponseApdu.prototype.getStatus = function() {
+    var statusCode = getStatusCode();
+    var meaning = 'Unknown';
+    for (var prop in statusCodes) {
+        if (statusCodes.hasOwnProperty(prop)) {
+            var result = statusCodes[prop];
+            if (statusCode.match(prop)) {
+                meaning = result;
+                break;
+            }
 
-module.exports = createResponseApdu;
+        }
+    }
+    return {
+        code: statusCode,
+        meaning: meaning
+    };
+};
+ResponseApdu.prototype.getStatusCode = function() {
+    return this.data.substr(-4);
+};
+ResponseApdu.prototype.isOk = function() {
+    return this.getStatusCode() === '9000';
+};
+ResponseApdu.prototype.buffer = function() {
+    return this.buffer;
+};
+ResponseApdu.prototype.hasMoreBytesAvailable = function() {
+    return this.data.substr(-4, 2) === '61';
+};
+ResponseApdu.prototype.numberOfBytesAvailable = function() {
+    var hexLength = this.data.substr(-2, 2);
+    return parseInt(hexLength, 16);
+};
+ResponseApdu.prototype.isWrongLength = function() {
+    return this.data.substr(-4, 2) === '6c';
+};
+ResponseApdu.prototype.correctLength = function() {
+    var hexLength = this.data.substr(-2, 2);
+    return parseInt(hexLength, 16);
+};
+ResponseApdu.prototype.toString = function() {
+    return this.data;
+};
+
+
+function create(buffer) {
+    return new ResponseApdu(buffer);
+}
+
+module.exports = create;
