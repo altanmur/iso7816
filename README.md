@@ -5,7 +5,7 @@
 
 ```javascript
 var cardreader = require('card-reader');
-var Iso7816 = require('Iso7816');
+var iso7816 = require('iso7816');
 
 cardreader.on('device-activated', function (reader) {
     console.info(`Device '${reader.name}' activated`);
@@ -32,7 +32,7 @@ cardreader.on('card-inserted', function (reader, status) {
 
     console.info(`Card inserted into '${reader.name}', atr: '${status.atr.toString('hex')}'`);
 
-    var application = Iso7816(cardreader);
+    var application = iso7816(cardreader);
     application
         .selectFile([0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31])
         .then(function (response) {

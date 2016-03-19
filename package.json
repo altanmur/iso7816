@@ -1,5 +1,5 @@
 {
-  "name": "Iso7816",
+  "name": "iso7816",
   "version": "1.0.9",
   "description": "",
   "main": "lib/Iso7816.js",
