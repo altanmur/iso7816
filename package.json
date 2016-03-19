@@ -1,8 +1,8 @@
 {
-  "name": "iso7816",
+  "name": "Iso7816",
   "version": "1.0.8",
   "description": "",
-  "main": "lib/iso7816.js",
+  "main": "lib/Iso7816.js",
   "scripts": {
     "compile": "babel -d lib/ src/",
     "compile:watch": "babel -w -d lib/ src/",
