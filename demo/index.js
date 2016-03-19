@@ -1,90 +1,41 @@
 var cardreader = require('card-reader');
-var iso7816 = require('../lib/iso7816');
+var Iso7816 = require('../lib/Iso7816');
+var hexify = require('hexify');
+
+
 
 cardreader.on('device-activated', function (reader) {
-    //console.info('Device activated', reader);
+    console.info(`Device '${reader.name}' activated`);
 });
+
 cardreader.on('device-deactivated', function (reader) {
-    //console.info('Device deactivated', reader);
+    console.info(`Device '${reader.name}' deactivated`);
 });
+
 cardreader.on('card-removed', function (reader) {
-    //console.info('Card removed', reader);
+    console.info(`Card removed from '${reader.name}' `);
 });
-cardreader.on('data-received', function (data) {
-    //console.info('Data received', data.toString());
+
+cardreader.on('issue-command', function (reader, command) {
+    console.info(`Command '${command.toString('hex')}' issued to '${reader.name}' `);
 });
-cardreader.on('error', function (error) {
-    //console.info('Error', error);
+
+cardreader.on('receive-response', function (reader, response) {
+    console.info(`Response '${response}' received from '${reader.name}' `);
 });
 
 
 cardreader.on('card-inserted', function (reader, status) {
-    //console.info('Card inserted', reader, status, this);
-    explore();
-});
 
+    console.info(`Card inserted into '${reader.name}', atr: '${status.atr.toString('hex')}'`);
 
-var aids = [
-    {name: 'VISA', aid: [0xa0, 0x00, 0x00, 0x00, 0x03]},
-    {name: 'VISA Debit/Credit', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x10, 0x10]},
-    {name: 'VISA Credit', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x10, 0x10, 0x01]},
-    {name: 'VISA Debit', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x10, 0x10, 0x02]},
-    {name: 'VISA Electron', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x20, 0x10]},
-    {name: 'VISA Interlink', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x30, 0x10]},
-    {name: 'VISA Plus', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x80, 0x10]},
-    {name: 'VISA ATM', aid: [0xa0, 0x00, 0x00, 0x00, 0x03, 0x99, 0x99, 0x10]},
-    {name: 'MASTERCARD', aid: [0xa0, 0x00, 0x00, 0x00, 0x04, 0x10, 0x10]},
-    {name: 'Maestro', aid: [0xa0, 0x00, 0x00, 0x00, 0x04, 0x30, 0x60]},
-    {name: 'Maestro UK', aid: [0xa0, 0x00, 0x00, 0x00, 0x05, 0x00, 0x01]},
-    {name: 'Maestro TEST', aid: [0xb0, 0x12, 0x34, 0x56, 0x78]},
-    {name: 'Self Service', aid: [0xa0, 0x00, 0x00, 0x00, 0x24, 0x01]},
-    {name: 'American Express', aid: [0xa0, 0x00, 0x00, 0x00, 0x25]},
-    {name: 'ExpressPay', aid: [0xa0, 0x00, 0x00, 0x00, 0x25, 0x01, 0x07, 0x01]},
-    {name: 'Link', aid: [0xa0, 0x00, 0x00, 0x00, 0x29, 0x10, 0x10]},
-    {name: 'Alias AID', aid: [0xa0, 0x00, 0x00, 0x00, 0x29, 0x10, 0x10]}
-];
-
-
-function explore() {
-
-    var PSE = [0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31];
-
-    var application = iso7816(cardreader);
+    var application = Iso7816(cardreader);
     application
-        .selectFile(PSE)
+        .selectFile([0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31])
         .then(function (response) {
-            console.info('selectFile: data-received', response.toString('hex'));
-            /*//return Promise.all(aids.map(function(aid) {
-            //    console.info('', aid.name);
-            //    return application.selectFile(aid.aid);
-            //}));
-            // return application.selectFile(aids[8].aid)
-        })
-        .then(function (response) {
-            console.info('selectFile: data-received', response.toString('hex'));
+            console.info(`Select PSE Response: '${response}'`);
         }).catch(function (error) {
-            console.error('selectFile: error', error);
-        });*/
-            /*var promises = [];
-            for (var sfi = 1; sfi < 2; sfi++) {
-                for (var record = 1; record < 2; record++) {
-                    promises.push(application.readRecord(sfi, record));
-                }
-            }
-            return Promise.all(promises)*/
-            var sfi = 1;
-            var record = 1;
-            return application.readRecord(sfi, record);
-        })
-        .then(function (response) {
-            console.info('response', response.toString());
-            ////console.info('responses', responses);
-            //responses.forEach(function(response) {
-            //    console.info('response', response.response.toString());
-            //});
-            ////console.info('readRecord: data-received', response.buffer().toString('hex'));
-            //console.info('parsed:\n', response.toTlvString());
-        }).catch(function (error) {
-            console.error('Error:', error, error.stack);
+        console.error('Error:', error, error.stack);
     });
-}
+
+});
