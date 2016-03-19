@@ -28,7 +28,6 @@ var ins = {
 
 function Iso7816(cardReader) {
     this.cardReader = cardReader;
-    console.info(`this: ${this.prototype}`);
 }
 
 Iso7816.prototype.issueCommand = function(commandApdu) {
