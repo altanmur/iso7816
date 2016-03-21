@@ -2,7 +2,7 @@
   "name": "iso7816",
   "version": "1.0.14",
   "description": "",
-  "main": "lib/Iso7816.js",
+  "main": "lib/iso7816-application.js",
   "scripts": {
     "compile": "babel -d lib/ src/",
     "compile:watch": "babel -w -d lib/ src/",

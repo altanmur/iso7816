@@ -1,5 +1,5 @@
 var cardreader = require('card-reader');
-var iso7816 = require('../lib/Iso7816Application');
+var iso7816 = require('../lib/iso7816-application');
 
 
 cardreader.on('device-activated', function (reader) {

@@ -1,7 +1,7 @@
 'use strict';
 
-import CommandApdu from './CommandApdu';
-import ResponseApdu from './ResponseApdu';
+import CommandApdu from './command-apdu';
+import ResponseApdu from './response-apdu';
 
 
 const ins = {
