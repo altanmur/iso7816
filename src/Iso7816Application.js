@@ -1,10 +1,10 @@
 'use strict';
 
-var CommandApdu = require('./CommandApdu');
-var ResponseApdu = require('./ResponseApdu');
+import CommandApdu from './CommandApdu';
+import ResponseApdu from './ResponseApdu';
 
 
-var ins = {
+const ins = {
     APPEND_RECORD: 0xE2,
     ENVELOPE: 0xC2,
     ERASE_BINARY: 0x0E,

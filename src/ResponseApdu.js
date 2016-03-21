@@ -1,6 +1,6 @@
 'use strict';
 
-var statusCodes = {
+const statusCodes = {
     '^9000$': 'Normal processing',
     '^61(.{2})$': 'Normal processing, (sw2 indicates the number of response bytes still available)',
     '^62(.{2})$': 'Warning processing',
@@ -44,11 +44,11 @@ function ResponseApdu(buffer) {
 }
 
 ResponseApdu.prototype.getStatus = function() {
-    var statusCode = getStatusCode();
-    var meaning = 'Unknown';
-    for (var prop in statusCodes) {
+    const statusCode = getStatusCode();
+    let meaning = 'Unknown';
+    for (let prop in statusCodes) {
         if (statusCodes.hasOwnProperty(prop)) {
-            var result = statusCodes[prop];
+            let result = statusCodes[prop];
             if (statusCode.match(prop)) {
                 meaning = result;
                 break;
@@ -74,14 +74,14 @@ ResponseApdu.prototype.hasMoreBytesAvailable = function() {
     return this.data.substr(-4, 2) === '61';
 };
 ResponseApdu.prototype.numberOfBytesAvailable = function() {
-    var hexLength = this.data.substr(-2, 2);
+    let hexLength = this.data.substr(-2, 2);
     return parseInt(hexLength, 16);
 };
 ResponseApdu.prototype.isWrongLength = function() {
     return this.data.substr(-4, 2) === '6c';
 };
 ResponseApdu.prototype.correctLength = function() {
-    var hexLength = this.data.substr(-2, 2);
+    let hexLength = this.data.substr(-2, 2);
     return parseInt(hexLength, 16);
 };
 ResponseApdu.prototype.toString = function() {
