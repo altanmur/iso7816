@@ -18,8 +18,8 @@ cardreader.on('issue-command', function (reader, command) {
     console.info(`Command '${command.toString('hex')}' issued to '${reader.name}' `);
 });
 
-cardreader.on('receive-response', function (reader, response) {
-    console.info(`Response '${response}' received from '${reader.name}' `);
+cardreader.on('receive-response', function (reader, response, command) {
+    console.info(`Response '${response}' received from '${reader.name}' in response to '${command}'`);
 });
 
 
