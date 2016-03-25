@@ -44,7 +44,7 @@ function ResponseApdu(buffer) {
 }
 
 ResponseApdu.prototype.getStatus = function() {
-    const statusCode = getStatusCode();
+    const statusCode = this.getStatusCode();
     let meaning = 'Unknown';
     for (let prop in statusCodes) {
         if (statusCodes.hasOwnProperty(prop)) {
