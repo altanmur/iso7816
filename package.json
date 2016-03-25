@@ -1,6 +1,6 @@
 {
   "name": "iso7816",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "",
   "main": "lib/iso7816-application.js",
   "scripts": {
