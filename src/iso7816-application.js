@@ -26,14 +26,15 @@ const ins = {
 };
 
 
-function Iso7816(cardReader) {
+function Iso7816(devices, cardReader) {
+    this.devices = devices;
     this.cardReader = cardReader;
 }
 
 Iso7816.prototype.issueCommand = function(commandApdu) {
     //console.log(`Iso7816.issueCommand '${commandApdu}' `);
-    return this.cardReader
-        .issueCommand(commandApdu.toBuffer())
+    return this.devices
+        .issueCommand(this.cardReader, commandApdu.toBuffer())
         .then(resp => {
             var response = ResponseApdu(resp);
             //console.log(`status code '${response.statusCode()}'`);
@@ -84,8 +85,8 @@ Iso7816.prototype.readRecord = function(sfi, record) {
 };
 
 
-function create(cardReader) {
-    return new Iso7816(cardReader);
+function create(devices, cardReader) {
+    return new Iso7816(devices, cardReader);
 }
 
 module.exports = create;
