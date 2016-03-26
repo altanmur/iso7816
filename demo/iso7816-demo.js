@@ -37,7 +37,7 @@ devices.on('card-inserted', function (event) {
     application
         .selectFile([0x31, 0x50, 0x41, 0x59, 0x2E, 0x53, 0x59, 0x53, 0x2E, 0x44, 0x44, 0x46, 0x30, 0x31])
         .then(function (response) {
-            console.info(`Select PSE Response: '${response}'`);
+            console.info(`Select PSE Response: '${response}' '${response.getStatus().meaning}'`);
         }).catch(function (error) {
             console.error('Error:', error, error.stack);
         });
