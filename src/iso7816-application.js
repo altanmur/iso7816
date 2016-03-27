@@ -84,6 +84,17 @@ Iso7816.prototype.readRecord = function(sfi, record) {
     }));
 };
 
+Iso7816.prototype.getData = function(p1, p2) {
+    //console.log(`Iso7816.getData, p1='${p1}', p2=${p2}`);
+    return this.issueCommand(CommandApdu({
+        cla: 0x00,
+        ins: ins.GET_DATA,
+        p1: p1,
+        p2: p2,
+        le: 0
+    }));
+};
+
 
 function create(devices, cardReader) {
     return new Iso7816(devices, cardReader);
